@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WeatherApp.Views.MainPage"
+             xmlns:viewmodel="clr-namespace:WeatherApp.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewmodel:MainPageViewModel"
+             BackgroundImageSource="weather.jpg">
+
+    <ContentPage.Resources>
+        <!-- Updated gradients with transparency -->
+        <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#CC4285f4" Offset="0.0" />
+            <GradientStop Color="#CC000080" Offset="1.0" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="MainCardGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#CCFFFFFF" Offset="0.0" />
+            <GradientStop Color="#CCF0F0F0" Offset="1.0" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="InfoCardGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#99e8f0fe" Offset="0.0" />
+            <GradientStop Color="#99c5d9fb" Offset="1.0" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ButtonGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#CC4285f4" Offset="0.0" />
+            <GradientStop Color="#CC1a73e8" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*" Padding="2" RowSpacing="20">
+            <!-- Header Section with glass effect -->
+            <Frame Grid.Row="0" 
+                   HeightRequest="80"
+                   Background="{StaticResource HeaderGradient}"
+                   CornerRadius="30"
+                   Padding="20"
+                   HasShadow="True"
+                   BorderColor="Transparent">
+                <Frame.Shadow>
+                    <Shadow Brush="#000000"
+                           Offset="0,4"
+                           Radius="8"
+                           Opacity="0.2"/>
+                </Frame.Shadow>
+                <Label Text="Weather App" 
+                       TextColor="White" 
+                       FontSize="32" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+            </Frame>
+
+            <!-- Main Content -->
+            <VerticalStackLayout Grid.Row="1" Spacing="20">
+                <!-- Loading Indicator -->
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                 IsVisible="{Binding IsLoading}"
+                                 Color="#4285f4"/>
+
+                <!-- Weather Card with glass effect -->
+                <Frame IsVisible="{Binding WeatherData, Converter={StaticResource NotNullConverter}}"
+                       Background="{StaticResource MainCardGradient}"
+                       CornerRadius="20"
+                       Padding="20"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <Frame.Shadow>
+                        <Shadow Brush="#000000"
+                               Offset="0,6"
+                               Radius="12"
+                               Opacity="0.15"/>
+                    </Frame.Shadow>
+                    <VerticalStackLayout Spacing="15">
+                        <!-- City Name -->
+                        <Label Text="{Binding WeatherData.CityName}"
+                               FontSize="28"
+                               TextColor="#1a73e8"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+
+                        <!-- Temperature and Description -->
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" Margin="0,10">
+                            <!-- Temperature Frame -->
+                            <Frame Grid.Column="0"
+                                   Background="{StaticResource InfoCardGradient}"
+                                   CornerRadius="15"
+                                   Padding="15"
+                                   HasShadow="True"
+                                   BorderColor="Transparent">
+                                <Frame.Shadow>
+                                    <Shadow Brush="#000000"
+                                           Offset="0,3"
+                                           Radius="6"
+                                           Opacity="0.1"/>
+                                </Frame.Shadow>
+                                <VerticalStackLayout>
+                                    <Label Text="Temperature"
+                                           TextColor="#4285f4"
+                                           FontSize="16"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding WeatherData.Main.Temperature, StringFormat='{0:F1}°C'}"
+                                           TextColor="#1a73e8"
+                                           FontSize="36"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Condition Frame -->
+                            <Frame Grid.Column="1"
+                                   Background="{StaticResource InfoCardGradient}"
+                                   CornerRadius="15"
+                                   Padding="15"
+                                   HasShadow="True"
+                                   BorderColor="Transparent">
+                                <Frame.Shadow>
+                                    <Shadow Brush="#000000"
+                                           Offset="0,3"
+                                           Radius="6"
+                                           Opacity="0.1"/>
+                                </Frame.Shadow>
+                                <VerticalStackLayout>
+                                    <Label Text="Condition"
+                                           TextColor="#4285f4"
+                                           FontSize="16"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding WeatherData.Weather[0].Description}"
+                                           TextColor="#1a73e8"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           LineBreakMode="WordWrap"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Humidity Frame -->
+                            <Frame Grid.Row="1" 
+                                   Grid.Column="0"
+                                   Background="{StaticResource InfoCardGradient}"
+                                   CornerRadius="15"
+                                   Margin="0,10,5,0"
+                                   Padding="15"
+                                   HasShadow="True"
+                                   BorderColor="Transparent">
+                                <Frame.Shadow>
+                                    <Shadow Brush="#000000"
+                                           Offset="0,3"
+                                           Radius="6"
+                                           Opacity="0.1"/>
+                                </Frame.Shadow>
+                                <VerticalStackLayout>
+                                    <Label Text="Humidity"
+                                           TextColor="#4285f4"
+                                           FontSize="16"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding WeatherData.Main.Humidity, StringFormat='{0}%'}"
+                                           TextColor="#1a73e8"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <!-- Pressure Frame -->
+                            <Frame Grid.Row="1" 
+                                   Grid.Column="1"
+                                   Background="{StaticResource InfoCardGradient}"
+                                   CornerRadius="15"
+                                   Margin="5,10,0,0"
+                                   Padding="15"
+                                   HasShadow="True"
+                                   BorderColor="Transparent">
+                                <Frame.Shadow>
+                                    <Shadow Brush="#000000"
+                                           Offset="0,3"
+                                           Radius="6"
+                                           Opacity="0.1"/>
+                                </Frame.Shadow>
+                                <VerticalStackLayout>
+                                    <Label Text="Pressure"
+                                           TextColor="#4285f4"
+                                           FontSize="16"
+                                           HorizontalOptions="Center"/>
+                                    <Label Text="{Binding WeatherData.Main.Pressure, StringFormat='{0} hPa'}"
+                                           TextColor="#1a73e8"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Refresh Button -->
+                <Button Text="Refresh"
+                        Command="{Binding RefreshCommand}"
+                        Background="{StaticResource ButtonGradient}"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="25"
+                        HeightRequest="50"
+                        Margin="40,10">
+                    <Button.Shadow>
+                        <Shadow Brush="#000000"
+                               Offset="0,4"
+                               Radius="8"
+                               Opacity="0.2"/>
+                    </Button.Shadow>
+                </Button>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
