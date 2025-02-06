@@ -9,7 +9,7 @@ namespace WeatherApp.Services;
 public class WeatherService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _apiKey = "b2a34f1c48ded20fdb147e2d9ab2f78f";
+    private readonly string _apiKey = "811dde43fb83489a3cbff4d769d73b9a";
     private readonly string _baseUrl = "https://api.openweathermap.org/data/2.5/weather";
 
     public WeatherService()
